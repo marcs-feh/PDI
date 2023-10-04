@@ -1,5 +1,7 @@
 import numpy as np
 
+from filter import join_channels
+
 def grayscale_simple(img: np.ndarray) -> np.ndarray:
     b, g, r = img[:,:,0], img[:,:,1], img[:,:,2]
     gs = (b + g + r) / 3
@@ -12,4 +14,9 @@ def grayscale_weighted(img: np.ndarray, rw: float = 1.0, gw: float = 1.0, bw: fl
 
 def grayscale_human_weighted(img: np.ndarray) -> np.ndarray:
     return grayscale_weighted(img, 0.299, 0.587, 0.114)
+
+def rgb_from_grayscale(img: np.ndarray) -> np.ndarray:
+    assert len(img.shape) < 3
+
+    return join_channels([img,img,img])
 
