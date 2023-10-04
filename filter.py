@@ -6,12 +6,17 @@ def apply_filter(img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     if len(img.shape) > 2:
         chans = split_channels(img)
         for i in range(0, len(chans)):
-            chans[i] = convolve2D(chans[i], kernel)
+            chans[i] = convolve2D(chans[i], kernel).clip(0, 1.0)
         return join_channels(chans)
-
     else:
         out = convolve2D(img, kernel).clip(0, 1.0)
         return out
+
+def apply_filters(img: np.ndarray, kernels: list[np.ndarray]) -> list[np.ndarray]:
+    results = []
+    for k in kernels:
+        results.append(apply_filter(img, k))
+    return results
 
 def valid_kernel_shape(shape) -> bool:
     h, w = shape[0], shape[1]
@@ -43,6 +48,4 @@ def convolve2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarray
             out[row - off][col - off] = (kernel * slice).sum()
             
     return out
-    
-# def cross_correlate(img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
-#     return
+
