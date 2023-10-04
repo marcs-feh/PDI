@@ -7,9 +7,10 @@ from noise import gaussian_noise
 def main():
     img = img_read('in.png')
     print(f'loaded ({img.shape})')
+    out = img
     out = grayscale_human_weighted(img)
     out = gaussian_noise(out, 0.2)
-    out = apply_filter(out, uniform_blur(5))
+    out = apply_filter(out, uniform_blur(3))
     img_write('out.png', out)
 
     return

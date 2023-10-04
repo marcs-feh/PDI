@@ -1,20 +1,30 @@
 from typing import Any
 import numpy as np
 
-def apply_filter(img: np.ndarray, kernel: np.ndarray, mode: str = 'convolution') -> np.ndarray:
-    if mode == 'convolution':
+def apply_filter(img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    chans = []
+    if len(img.shape) > 2:
+        chans = split_channels(img)
+        for i in range(0, len(chans)):
+            chans[i] = convolve2D(chans[i], kernel)
+        return join_channels(chans)
+
+    else:
         out = convolve2D(img, kernel).clip(0, 1.0)
         return out
-    elif mode == 'correlation':
-        return img
-    else:
-        raise Exception(f'Invalid mode: {mode}')
-        # out = np.correlate(img, )
-
 
 def valid_kernel_shape(shape) -> bool:
     h, w = shape[0], shape[1]
     return ((h % 2) != 0) and (w == h)
+
+def split_channels(img: np.ndarray) -> list[np.ndarray]:
+    ch = img.shape[2]
+    chans = np.dsplit(img, ch)
+    return chans
+
+def join_channels(chans: list[np.ndarray]) -> np.ndarray:
+    stacked = np.dstack(chans)
+    return stacked
 
 # TODO: Improve perf, python `for` is way too slow
 def convolve2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarray:
