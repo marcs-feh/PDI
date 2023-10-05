@@ -61,7 +61,7 @@ def invert(img: np.ndarray) -> np.ndarray:
     return (-img) + 1.0
 
 def threshold(img: np.ndarray, t: float = 0.5) -> np.ndarray:
-    f = np.vectorize(lambda x: 0.0 if x < t else 1.0)
+    f = np.vectorize(lambda x: 0.0 if abs(x) < t else 1.0)
 
     return f(img)
 
