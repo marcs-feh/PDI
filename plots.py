@@ -47,9 +47,9 @@ def plot_histogram_rgb(img: np.ndarray):
         g_bins /= g_bins.max()
         r_bins /= r_bins.max()
 
-        plt.plot(b_bins, color='blue')
-        plt.plot(g_bins, color='green')
-        plt.plot(r_bins, color='red')
+        plt.plot(b_bins, color='blue', alpha=0.7)
+        plt.plot(g_bins, color='green', alpha=0.7)
+        plt.plot(r_bins, color='red', alpha=0.7)
 
         # TODO: img write
         plt.show()

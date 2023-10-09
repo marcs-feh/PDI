@@ -20,3 +20,27 @@ def rgb_from_grayscale(img: np.ndarray) -> np.ndarray:
 
     return join_channels([img,img,img])
 
+def negative(img: np.ndarray) -> np.ndarray:
+    out = 1.0 - img
+    return out
+
+def log_transform(img: np.ndarray, c: float = 1.0) -> np.ndarray:
+    out = c * np.log(1.0 + img)
+    return out.clip(0, 1.0)
+
+def gamma(img: np.ndarray, gamma_val: float, c: float = 1.0) -> np.ndarray:
+    out = c * (img ** gamma_val)
+    return out.clip(0, 1.0)
+
+def brightness(img: np.ndarray, v: float) -> np.ndarray:
+    out = (img + v).clip(0, 1.0)
+    return out
+
+def contrast(img: np.ndarray, v: float) -> np.ndarray:
+    out = (img * v).clip(0, 1.0)
+    return out
+
+def brightness_and_contrast(img: np.ndarray, c: float, b: float) -> np.ndarray:
+    out = (b + (img * c)).clip(0, 1.0)
+    return out
+
