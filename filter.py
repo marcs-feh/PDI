@@ -63,8 +63,8 @@ def convolve2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarray
 def invert(img: np.ndarray) -> np.ndarray:
     return (-img) + 1.0
 
-def threshold(img: np.ndarray, t: float = 0.5) -> np.ndarray:
-    f = np.vectorize(lambda x: 0.0 if abs(x) < t else 1.0)
+def threshold(img: np.ndarray, t: float, k: float = 1.0) -> np.ndarray:
+    f = np.vectorize(lambda x: 0.0 if abs(x) < t else k)
 
     return f(img)
 

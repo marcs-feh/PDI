@@ -18,8 +18,7 @@ def main():
     print(f'loaded {np.prod(img.shape) * 4} bytes')
     mag = magnitude_spectrum(img)
 
-    # out = brightness_and_contrast(img, 1.9, -0.9)
-    out = threshold(img, 0.8)
+    out = threshold(img, 0.2);
 
     img_write('out.png', out)
     img_write('mag_spec.out.png', mag)
