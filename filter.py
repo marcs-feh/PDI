@@ -1,4 +1,3 @@
-from typing import Any
 import numpy as np
 
 CONVOLVE = 0
@@ -69,4 +68,12 @@ def threshold(img: np.ndarray, t: float = 0.5) -> np.ndarray:
 
     return f(img)
 
+def magnitude_spectrum(img: np.ndarray, fact: float = 0.1) -> np.ndarray:
+    freq = np.fft.fftshift(np.fft.fft2(img))
+    spec = fact * np.log(np.abs(freq))
+    return spec
+
+def magnitude_spectrum_freq(freq: np.ndarray, fact: float = 0.1) -> np.ndarray:
+    mag = fact * np.log(np.abs(freq))
+    return mag
 
