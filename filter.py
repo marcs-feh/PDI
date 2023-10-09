@@ -8,20 +8,24 @@ def apply_filter(img: np.ndarray, kernel: np.ndarray, mode: int = CONVOLVE) -> n
     assert (mode == CONVOLVE) or (mode == CORRELATE)
     f = convolve2D if mode == CONVOLVE else correlate2D
     chans = []
-    if len(img.shape) > 2:
+    # RGB Mode
+    if len(img.shape) == 3:
         chans = split_channels(img)
         for i in range(0, len(chans)):
             chans[i] = f(chans[i], kernel).clip(0, 1.0)
         return join_channels(chans)
+    # Grayscale
     else:
         out = f(img, kernel).clip(0, 1.0)
         return out
 
-def apply_filters(img: np.ndarray, kernels: list[np.ndarray], mode: str = CONVOLVE) -> list[np.ndarray]:
+def apply_filters(img: np.ndarray, kernels: list[np.ndarray], mode: int = CONVOLVE) -> list[np.ndarray]:
     results = []
     for k in kernels:
         results.append(apply_filter(img, k, mode=mode))
     return results
+
+
 
 def valid_kernel_shape(shape) -> bool:
     h, w = shape[0], shape[1]
