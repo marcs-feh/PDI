@@ -1,4 +1,5 @@
 import numpy as np
+from color import join_channels, split_channels
 
 CONVOLVE = 0
 CORRELATE = 1
@@ -30,14 +31,6 @@ def valid_kernel_shape(shape) -> bool:
     h, w = shape[0], shape[1]
     return ((h % 2) != 0) and (w == h)
 
-def split_channels(img: np.ndarray) -> list[np.ndarray]:
-    ch = img.shape[2]
-    chans = np.dsplit(img, ch)
-    return chans
-
-def join_channels(chans: list[np.ndarray]) -> np.ndarray:
-    stacked = np.dstack(chans)
-    return stacked
 
 # TODO: Improve perf, python `for` is way too slow
 def correlate2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarray:
@@ -59,14 +52,6 @@ def correlate2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarra
 
 def convolve2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarray:
     return correlate2D(img, kernel[::-1], padding_val=padding_val)
-
-def invert(img: np.ndarray) -> np.ndarray:
-    return (-img) + 1.0
-
-def threshold(img: np.ndarray, t: float, k: float = 1.0) -> np.ndarray:
-    f = np.vectorize(lambda x: 0.0 if abs(x) < t else k)
-
-    return f(img)
 
 def magnitude_spectrum(img: np.ndarray, fact: float = 0.1) -> np.ndarray:
     freq = np.fft.fftshift(np.fft.fft2(img))

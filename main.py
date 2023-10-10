@@ -1,11 +1,10 @@
-from filter import *
+from spatial_filter import *
+from pointwise_filter import *
 from img_file import *
 from color import *
 from kernels import *
 from noise import *
 from plots import *
-
-import cv2 as cv
 
 def fft(img: np.ndarray):
     return np.fft.fftshift(np.fft.fft2(img))
@@ -18,7 +17,7 @@ def main():
     print(f'loaded {np.prod(img.shape) * 4} bytes')
     mag = magnitude_spectrum(img)
 
-    out = threshold(img, 0.2);
+    out = threshold(img, 0.9)
 
     img_write('out.png', out)
     img_write('mag_spec.out.png', mag)
