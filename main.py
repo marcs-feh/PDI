@@ -17,7 +17,7 @@ def main():
     # mag = magnitude_spectrum(img)
     out = grayscale_human_weighted(img)
 
-    out = uniform_blur(out, 3)
+    out = gaussian_blur(out, sigma=1.5)
     out = laplacian_sharpening(out, 0.3)
 
     img_write('out.png', out)

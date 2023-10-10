@@ -12,6 +12,10 @@ def laplacian_sharpening(img: np.ndarray, c: float) -> np.ndarray:
 
     return out.clip(0, 1.0)
 
+def gaussian_blur(img: np.ndarray, n: int = 3, sigma: float = 1.0) -> np.ndarray:
+    kern = kn.gaussian_blur_mask(sigma, n)
+    return apply_filter(img, kern)
+
 def uniform_blur(img: np.ndarray, n: int) -> np.ndarray:
     return apply_filter(img, kn.uniform_blur_mask(n))
 

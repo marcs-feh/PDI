@@ -24,3 +24,18 @@ laplacian_sharpening_mask = np.array([
     [-1, +8, -1],
     [-1, -1, -1],
 ], dtype=np.float32)
+
+def gaussian_blur_mask(sigma:float, n: int = 3):
+    x, y = np.meshgrid(np.linspace(-1,1,n, dtype=np.float32),
+                       np.linspace(-1,1,n, dtype=np.float32))
+
+    omega = 2 * (sigma ** 2)
+
+    factor = 1/(np.pi * omega)
+    exponent = -(((x*x) + (y*y))/omega)
+    res = factor * np.exp(exponent)
+
+    res /= res.sum()
+
+    return res
+
