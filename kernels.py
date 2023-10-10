@@ -1,6 +1,6 @@
 import numpy as np
 
-def uniform_blur(n: int, dtype=np.float32) -> np.ndarray:
+def uniform_blur_mask(n: int, dtype=np.float32) -> np.ndarray:
     kern = np.zeros((n, n), dtype=dtype)
     kern += (1 / (n * n))
     return kern
@@ -19,3 +19,8 @@ def sobel_edge_detect():
 
     return [gx, gy]
 
+laplacian_sharpening_mask = np.array([
+    [-1, -1, -1],
+    [-1, +8, -1],
+    [-1, -1, -1],
+], dtype=np.float32)

@@ -1,8 +1,20 @@
 import numpy as np
 from color import join_channels, split_channels
+import kernels as kn
 
 CONVOLVE = 0
 CORRELATE = 1
+
+
+def laplacian_sharpening(img: np.ndarray, c: float) -> np.ndarray:
+    out = c * apply_filter(img, kn.laplacian_sharpening_mask)
+    out += img
+
+    return out.clip(0, 1.0)
+
+def uniform_blur(img: np.ndarray, n: int) -> np.ndarray:
+    return apply_filter(img, kn.uniform_blur_mask(n))
+
 
 def apply_filter(img: np.ndarray, kernel: np.ndarray, mode: int = CONVOLVE) -> np.ndarray:
     assert (mode == CONVOLVE) or (mode == CORRELATE)
@@ -24,7 +36,6 @@ def apply_filters(img: np.ndarray, kernels: list[np.ndarray], mode: int = CONVOL
     for k in kernels:
         results.append(apply_filter(img, k, mode=mode))
     return results
-
 
 
 def valid_kernel_shape(shape) -> bool:
