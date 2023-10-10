@@ -17,7 +17,7 @@ def main():
     print(f'loaded {np.prod(img.shape) * 4} bytes')
     mag = magnitude_spectrum(img)
 
-    out = threshold(img, 0.9)
+    out = contrast_stretching(img)
 
     img_write('out.png', out)
     img_write('mag_spec.out.png', mag)

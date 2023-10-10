@@ -42,3 +42,15 @@ def contrast(img: np.ndarray, v: float) -> np.ndarray:
 def brightness_and_contrast(img: np.ndarray, c: float, b: float) -> np.ndarray:
     out = (b + (img * c)).clip(0, 1.0)
     return out
+
+def contrast_stretching(img: np.ndarray) -> np.ndarray:
+    def stretch(px):
+        if px <= (1/3):
+            return px/2
+        elif (px > (1/3)) and (px < (2/3)):
+            return (2 * px) - 0.5
+        else:
+            return (px / 2) + 0.5
+    
+    out = np.vectorize(stretch)(img)
+    return out.clip(0, 1.0)
