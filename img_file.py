@@ -1,11 +1,16 @@
 import numpy as np
 from cv2 import imread as _imread
 from cv2 import imwrite as _imwrite
+from cv2 import IMREAD_GRAYSCALE
 
 U8_MAX = 0xff
 
-def img_read(path: str) -> np.ndarray:
-    img = _imread(path)
+def img_read(path: str, grayscale: bool = False) -> np.ndarray:
+    img = None
+    if grayscale:
+        img = _imread(path, IMREAD_GRAYSCALE)
+    else:
+        img = _imread(path)
     return img_normalize(img)
 
 def img_normalize(img: np.ndarray):
