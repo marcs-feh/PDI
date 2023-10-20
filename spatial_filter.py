@@ -5,6 +5,38 @@ import kernels as kn
 CONVOLVE = 0
 CORRELATE = 1
 
+def is_rgb(img: np.ndarray) -> bool:
+    try:
+        return img.shape[2] == 3
+    except IndexError:
+        return False
+
+def median_filter(img: np.ndarray, neighbor_sq: int = 3,padding_val:int =0xff) -> np.ndarray:
+    assert valid_kernel_shape((neighbor_sq, neighbor_sq))
+
+    # Handle RGB
+
+    if is_rgb(img):
+        channels = split_channels(img)
+        channels = [median_filter(ch, neighbor_sq, padding_val) for ch in channels]
+        return join_channels(channels)
+
+    off = neighbor_sq // 2
+
+    padded = np.pad(img, (off, off), 'constant', constant_values=padding_val)
+
+    height, width = padded.shape[0], padded.shape[1]
+    out = np.ndarray(img.shape, dtype=np.float32)
+
+    for row in range(off, height - off):
+        for col in  range(off, width - off):
+            slice = padded[row-off:row+off+1, col-off:col+off+1].flatten()
+            # slice.sort()
+            median = np.median(slice)
+            out[row - off][col - off] = median
+
+    return out
+
 def unsharp_masking(img: np.ndarray, k: float = 1.0, blur_sigma: float = 1.0, blur_size: int = 3) -> np.ndarray:
     mask = k * (img - gaussian_blur(img, blur_size, blur_sigma))
     res = (img + mask).clip(0, 1.0)
@@ -71,18 +103,9 @@ def correlate2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarra
         for col in  range(off, width - off):
             slice = padded[row-off:row+off+1, col-off:col+off+1]
             out[row - off][col - off] = (kernel * slice).sum()
-            
+
     return out
 
 def convolve2D(img: np.ndarray, kernel: np.ndarray, padding_val=0) -> np.ndarray:
     return correlate2D(img, kernel[::-1], padding_val=padding_val)
-
-def magnitude_spectrum(img: np.ndarray, fact: float = 0.1) -> np.ndarray:
-    freq = np.fft.fftshift(np.fft.fft2(img))
-    spec = fact * np.log(np.abs(freq))
-    return spec
-
-def magnitude_spectrum_freq(freq: np.ndarray, fact: float = 0.1) -> np.ndarray:
-    mag = fact * np.log(np.abs(freq))
-    return mag
 

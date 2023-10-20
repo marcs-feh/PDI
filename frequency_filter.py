@@ -37,4 +37,12 @@ def smooth_circular_mask(shape: tuple, inner: int, outer: int) -> np.ndarray:
         img_write(fname, mask)
         return mask
 
+def magnitude_spectrum(img: np.ndarray, fact: float = 0.1) -> np.ndarray:
+    freq = np.fft.fftshift(np.fft.fft2(img))
+    spec = fact * np.log(np.abs(freq))
+    return spec
+
+def magnitude_spectrum_freq(freq: np.ndarray, fact: float = 0.1) -> np.ndarray:
+    mag = fact * np.log(np.abs(freq))
+    return mag
 

@@ -8,8 +8,6 @@ from plots import *
 
 # TODO:
 # Filtragem Espacial:
-# - Mediana
-# - Filtro 3.38 (???)
 # - Edge dedect:
 #   - Laplacian
 #   - Roberts
@@ -24,11 +22,15 @@ def ifft(freq_space: np.ndarray):
 def main():
     img = img_read('in.png')
     print(f'loaded {np.prod(img.shape) * 4} bytes')
-    out = grayscale_human_weighted(img)
-    # out = img
-    out = uniform_blur(out, 3)
 
-    out = unsharp_masking(out, k=1.8)
+    # out = grayscale_human_weighted(img)
+    out = img
+
+    out = gaussian_noise(out, 0.1)
+    # out = uniform_blur(out, 3)
+
+    out = median_filter(out)
+    # out = unsharp_masking(out, k=1.8)
 
     img_write('out.png', out)
 

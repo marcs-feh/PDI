@@ -21,6 +21,7 @@ def rgb_from_grayscale(img: np.ndarray) -> np.ndarray:
 def split_channels(img: np.ndarray) -> list[np.ndarray]:
     ch = img.shape[2]
     chans = np.dsplit(img, ch)
+    chans = [ch[:, :,0] for ch in chans]
     return chans
 
 def join_channels(chans: list[np.ndarray]) -> np.ndarray:
