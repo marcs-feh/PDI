@@ -5,19 +5,18 @@ def uniform_blur_mask(n: int, dtype=np.float32) -> np.ndarray:
     kern += (1 / (n * n))
     return kern
 
-def sobel_edge_detect():
-    gx = np.array([
-        [-1, 0, +1],
-        [-2, 0, +2],
-        [-1, 0, +1],
-    ], dtype=np.float32)
-    gy = np.array([
-        [+1, +2, +1],
-        [0,  0,  0],
-        [-1, -2, -1],
-    ], dtype=np.float32)
+sobel_edge_x = np.array([
+    [-1, 0, +1],
+    [-2, 0, +2],
+    [-1, 0, +1],
+], dtype=np.float32)
 
-    return [gx, gy]
+sobel_edge_y = np.array([
+    [+1, +2, +1],
+    [0,  0,  0],
+    [-1, -2, -1],
+], dtype=np.float32)
+
 
 laplacian_sharpening_mask = np.array([
     [+1, +1, +1],

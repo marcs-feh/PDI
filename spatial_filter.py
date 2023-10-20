@@ -42,6 +42,15 @@ def unsharp_masking(img: np.ndarray, k: float = 1.0, blur_sigma: float = 1.0, bl
     res = (img + mask).clip(0, 1.0)
     return res
 
+def laplacian_edge_detect(img: np.ndarray) -> np.ndarray:
+    if len(img.shape) == 3:
+        out = apply_filter(grayscale_human_weighted(img), kn.laplacian_sharpening_mask)
+        out = rgb_from_grayscale(out)
+    else:
+        out = apply_filter(img, kn.laplacian_sharpening_mask)
+
+    return out.clip(0, 1.0)
+
 def laplacian_sharpening(img: np.ndarray, c: float) -> np.ndarray:
     if len(img.shape) == 3:
         out = c * apply_filter(grayscale_human_weighted(img), kn.laplacian_sharpening_mask)
@@ -60,6 +69,9 @@ def gaussian_blur(img: np.ndarray, n: int = 3, sigma: float = 1.0) -> np.ndarray
 def uniform_blur(img: np.ndarray, n: int) -> np.ndarray:
     return apply_filter(img, kn.uniform_blur_mask(n))
 
+def sobel_edge_detect(img: np.ndarray) -> np.ndarray:
+    a, b = apply_filters(img, [kn.sobel_edge_x, kn.sobel_edge_y])
+    return (a + b).clip(0, 1.0)
 
 def apply_filter(img: np.ndarray, kernel: np.ndarray, mode: int = CONVOLVE) -> np.ndarray:
     assert (mode == CONVOLVE) or (mode == CORRELATE)

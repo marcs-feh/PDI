@@ -23,10 +23,9 @@ def main():
     img = img_read('in.png')
     print(f'loaded {np.prod(img.shape) * 4} bytes')
 
-    # out = grayscale_human_weighted(img)
-    out = img
+    out = grayscale_human_weighted(img)
+    # out = img
 
-    out = gaussian_noise(out, 0.1)
     # out = uniform_blur(out, 3)
 
     out = median_filter(out)
