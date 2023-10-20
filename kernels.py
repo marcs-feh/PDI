@@ -20,9 +20,9 @@ def sobel_edge_detect():
     return [gx, gy]
 
 laplacian_sharpening_mask = np.array([
-    [-1, -1, -1],
-    [-1, +8, -1],
-    [-1, -1, -1],
+    [+1, +1, +1],
+    [+1, -8, +1],
+    [+1, +1, +1],
 ], dtype=np.float32)
 
 def gaussian_blur_mask(sigma:float, n: int = 3):
@@ -36,6 +36,8 @@ def gaussian_blur_mask(sigma:float, n: int = 3):
     res = factor * np.exp(exponent)
 
     res /= res.sum()
+
+    # assert (res.max() <= 1.0001)
 
     return res
 

@@ -1,14 +1,23 @@
 import numpy as np
-from color import join_channels, split_channels
+from color import join_channels, rgb_from_grayscale, split_channels, grayscale_human_weighted
 import kernels as kn
 
 CONVOLVE = 0
 CORRELATE = 1
 
+def unsharp_masking(img: np.ndarray, k: float = 1.0, blur_sigma: float = 1.0, blur_size: int = 3) -> np.ndarray:
+    mask = k * (img - gaussian_blur(img, blur_size, blur_sigma))
+    res = (img + mask).clip(0, 1.0)
+    return res
 
 def laplacian_sharpening(img: np.ndarray, c: float) -> np.ndarray:
-    out = c * apply_filter(img, kn.laplacian_sharpening_mask)
-    out += img
+    if len(img.shape) == 3:
+        out = c * apply_filter(grayscale_human_weighted(img), kn.laplacian_sharpening_mask)
+        out = rgb_from_grayscale(out)
+        out += img
+    else:
+        out = c * apply_filter(img, kn.laplacian_sharpening_mask)
+        out += img
 
     return out.clip(0, 1.0)
 

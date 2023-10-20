@@ -6,22 +6,31 @@ from color import *
 from noise import *
 from plots import *
 
+# TODO:
+# Filtragem Espacial:
+# - Mediana
+# - Filtro 3.38 (???)
+# - Edge dedect:
+#   - Laplacian
+#   - Roberts
+# OpenCV Canny (?????)
+
+def fft(img: np.ndarray):
+    return np.fft.fftshift(np.fft.fft2(img))
+
+def ifft(freq_space: np.ndarray):
+    return np.abs(np.fft.ifft2(np.fft.fftshift(freq_space)))
+
 def main():
     img = img_read('in.png')
     print(f'loaded {np.prod(img.shape) * 4} bytes')
-    # mag = magnitude_spectrum(img)
     out = grayscale_human_weighted(img)
+    # out = img
+    out = uniform_blur(out, 3)
 
-    INNER = 10
-    OUTER = 80
-    mask = smooth_circular_mask(out.shape, INNER, OUTER)
-
-    out = fft(out) * mask
-    out = grayscale_human_weighted(img) * ifft(out)
-    # out = laplacian_sharpening(out, 0.3)
+    out = unsharp_masking(out, k=1.8)
 
     img_write('out.png', out)
-    # img_write('mag_spec.out.png', mag)
 
 if __name__ == '__main__': main()
 
