@@ -9,7 +9,6 @@ from plots import *
 # TODO:
 # Filtragem Espacial:
 # - Edge dedect:
-#   - Laplacian
 #   - Roberts
 # OpenCV Canny (?????)
 
@@ -24,6 +23,8 @@ def main():
     print(f'loaded {np.prod(img.shape) * 4} bytes')
 
     out = grayscale_human_weighted(img)
+    out = low_pass_butterworth_filter(out, 50, 2)
+    # out = butterworth_mask(out.shape, 20, 2)
     # out = img
 
     img_write('out.png', out)
