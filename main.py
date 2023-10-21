@@ -26,11 +26,6 @@ def main():
     out = grayscale_human_weighted(img)
     # out = img
 
-    # out = uniform_blur(out, 3)
-
-    out = median_filter(out)
-    # out = unsharp_masking(out, k=1.8)
-
     img_write('out.png', out)
 
 if __name__ == '__main__': main()
