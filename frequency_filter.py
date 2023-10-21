@@ -39,6 +39,19 @@ def circular_mask(shape: tuple, radius: int) -> np.ndarray:
 #         return mask
 
 
+def gaussian_mask(shape: tuple, radius: int) -> np.ndarray:
+    mask = np.zeros(shape, dtype=np.float32)
+
+    H = shape[0]
+    W = shape[1]
+    cr = (H//2)
+    cc = (W//2)
+    for row in range(0, H):
+        for col in range(0, W):
+            d = np.sqrt( ((row - cr) ** 2) + ((col - cc) ** 2))
+            mask[row][col] = np.exp( (-(d**2)) / (2 * (radius**2)) )
+    return mask
+
 def butterworth_mask(shape: tuple, radius: int, order: int) -> np.ndarray:
     mask = np.zeros(shape, dtype=np.float32)
 
@@ -79,6 +92,17 @@ def high_pass_butterworth_filter(img:np.ndarray, radius: int, order: int) -> np.
     freq *= mask
     return ifft(freq)
 
+def low_pass_gaussian_filter(img:np.ndarray, radius: int) -> np.ndarray:
+    freq = fft(img)
+    mask = gaussian_mask(img.shape, radius)
+    freq *= mask
+    return ifft(freq)
+
+def high_pass_gaussian_filter(img:np.ndarray, radius: int) -> np.ndarray:
+    freq = fft(img)
+    mask = negative(gaussian_mask(img.shape, radius))
+    freq *= mask
+    return ifft(freq)
 
 def magnitude_spectrum(img: np.ndarray, fact: float = 0.1) -> np.ndarray:
     freq = np.fft.fftshift(np.fft.fft2(img))
