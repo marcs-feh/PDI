@@ -23,21 +23,23 @@ def circular_mask(shape: tuple, radius: int) -> np.ndarray:
 
     return mask
 
-# def smooth_circular_mask(shape: tuple, inner: int, outer: int) -> np.ndarray:
+# TODO: make it work.
+# def laplacian_mask(shape: tuple) -> np.ndarray:
+#     mask = np.zeros(shape, dtype=np.float32)
+#
 #     H = shape[0]
 #     W = shape[1]
-#     fname = f'smooth-circle-mask-cache-{W}x{H}-{inner}:{outer}.tiff'
-#     if exists(fname):
-#         mask = img_read(fname, grayscale=True)
-#         return mask
-#     else:
-#         mask = circular_mask(shape, outer)
-#         for r in range(inner, outer):
-#             mask += circular_mask(shape, r)
-#         mask /= mask.max()
-#         img_write(fname, mask)
-#         return mask
-
+#
+#     cr = (H//2)
+#     cc = (W//2)
+#
+#     for row in range(0, H):
+#         for col in range(0, W):
+#             v = 0.5 - (abs(col - cc) / W)
+#             u = 0.5 - (abs(row - cr) / H)
+#             mask[row][col] = (u * v)
+#
+#     return mask
 
 def gaussian_mask(shape: tuple, radius: int) -> np.ndarray:
     mask = np.zeros(shape, dtype=np.float32)
@@ -51,6 +53,7 @@ def gaussian_mask(shape: tuple, radius: int) -> np.ndarray:
             d = np.sqrt( ((row - cr) ** 2) + ((col - cc) ** 2))
             mask[row][col] = np.exp( (-(d**2)) / (2 * (radius**2)) )
     return mask
+
 
 def butterworth_mask(shape: tuple, radius: int, order: int) -> np.ndarray:
     mask = np.zeros(shape, dtype=np.float32)
@@ -68,29 +71,43 @@ def butterworth_mask(shape: tuple, radius: int, order: int) -> np.ndarray:
 
     return mask
 
-def low_pass_filter(img: np.ndarray, radius: int) -> np.ndarray:
+def low_pass_ideal_filter(img: np.ndarray, radius: int) -> np.ndarray:
     freq = fft(img)
     mask = circular_mask(img.shape, radius)
     freq *= mask
     return ifft(freq)
 
-def high_pass_filter(img: np.ndarray, radius: int) -> np.ndarray:
+def high_pass_ideal_filter(img: np.ndarray, radius: int) -> np.ndarray:
     freq = fft(img)
     mask = negative(circular_mask(img.shape, radius))
     freq *= mask
     return ifft(freq)
 
-def low_pass_butterworth_filter(img:np.ndarray, radius: int, order: int) -> np.ndarray:
+def band_pass_ideal_filter(img:np.ndarray, band: int, bandwidth: int):
+    freq = fft(img)
+    mask = circular_mask(img.shape, band + (bandwidth//2)) + negative(circular_mask(img.shape, band - (bandwidth//2)))
+    freq *= mask
+    return ifft(freq)
+
+def low_pass_butterworth_filter(img:np.ndarray, radius: int, order: int = 2) -> np.ndarray:
     freq = fft(img)
     mask = butterworth_mask(img.shape, radius, order)
     freq *= mask
     return ifft(freq)
 
-def high_pass_butterworth_filter(img:np.ndarray, radius: int, order: int) -> np.ndarray:
+def high_pass_butterworth_filter(img:np.ndarray, radius: int, order: int = 2) -> np.ndarray:
     freq = fft(img)
     mask = negative(butterworth_mask(img.shape, radius, order))
     freq *= mask
     return ifft(freq)
+
+def band_pass_butterworth_filter(img:np.ndarray, band: int, bandwidth: int, order: int = 2):
+    freq = fft(img)
+    mask = (butterworth_mask(img.shape, band + (bandwidth//2), order)
+         + negative(butterworth_mask(img.shape, band - (bandwidth//2), order)))
+    freq *= mask
+    return ifft(freq)
+
 
 def low_pass_gaussian_filter(img:np.ndarray, radius: int) -> np.ndarray:
     freq = fft(img)
@@ -101,6 +118,13 @@ def low_pass_gaussian_filter(img:np.ndarray, radius: int) -> np.ndarray:
 def high_pass_gaussian_filter(img:np.ndarray, radius: int) -> np.ndarray:
     freq = fft(img)
     mask = negative(gaussian_mask(img.shape, radius))
+    freq *= mask
+    return ifft(freq)
+
+def band_pass_gaussian_filter(img:np.ndarray, band: int, bandwidth: int):
+    freq = fft(img)
+    mask = (gaussian_mask(img.shape, band + (bandwidth//2))
+         + negative(gaussian_mask(img.shape, band - (bandwidth//2))))
     freq *= mask
     return ifft(freq)
 

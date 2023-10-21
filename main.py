@@ -23,8 +23,8 @@ def main():
     print(f'loaded {np.prod(img.shape) * 4} bytes')
 
     out = grayscale_human_weighted(img)
-    out = high_pass_gaussian_filter(out, 50)
-    # out = img
+
+    out = band_pass_gaussian_filter(out, 10, 10)
 
     img_write('out.png', out)
 
