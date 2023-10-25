@@ -1,7 +1,5 @@
 import numpy as np
-from os.path import exists
-from pointwise_filter import negative
-from img_file import img_write, img_read
+from image_proc.pointwise_filter import negative
 
 def fft(img: np.ndarray):
     return np.fft.fftshift(np.fft.fft2(img))
@@ -22,24 +20,6 @@ def circular_mask(shape: tuple, radius: int) -> np.ndarray:
                 n += 1
 
     return mask
-
-# TODO: make it work.
-# def laplacian_mask(shape: tuple) -> np.ndarray:
-#     mask = np.zeros(shape, dtype=np.float32)
-#
-#     H = shape[0]
-#     W = shape[1]
-#
-#     cr = (H//2)
-#     cc = (W//2)
-#
-#     for row in range(0, H):
-#         for col in range(0, W):
-#             v = 0.5 - (abs(col - cc) / W)
-#             u = 0.5 - (abs(row - cr) / H)
-#             mask[row][col] = (u * v)
-#
-#     return mask
 
 def gaussian_mask(shape: tuple, radius: int) -> np.ndarray:
     mask = np.zeros(shape, dtype=np.float32)

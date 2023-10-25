@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from img_file import img_denormalize
+from image_proc.img_file import img_denormalize
 
 def plot_histogram(img: np.ndarray):
     if len(img.shape) == 3:

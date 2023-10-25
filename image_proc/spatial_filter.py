@@ -1,6 +1,6 @@
 import numpy as np
-from color import join_channels, rgb_from_grayscale, split_channels, grayscale_human_weighted
-import kernels as kn
+from image_proc.color import join_channels, rgb_from_grayscale, split_channels, grayscale_human_weighted
+import image_proc.kernels as kn
 
 CONVOLVE = 0
 CORRELATE = 1
