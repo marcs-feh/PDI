@@ -119,7 +119,7 @@ def band_pass_gaussian_filter(img:np.ndarray, band: int, bandwidth: int, reject:
     return ifft(freq)
 
 def magnitude_spectrum(img: np.ndarray, fact: float = 0.1) -> np.ndarray:
-    freq = np.fft.fftshift(np.fft.fft2(img))
+    freq = fft(img)
     spec = fact * np.log(np.abs(freq))
     return spec
 
