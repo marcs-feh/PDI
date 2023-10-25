@@ -3,8 +3,6 @@ import numpy as np
 
 # TODO:
 # Filtragem Espacial:
-# - Edge dedect:
-#   - Roberts
 # OpenCV Canny (?????)
 
 def main():
