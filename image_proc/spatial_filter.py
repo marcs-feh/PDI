@@ -15,7 +15,6 @@ def median_filter(img: np.ndarray, neighbor_sq: int = 3,padding_val:int =0xff) -
     assert valid_kernel_shape((neighbor_sq, neighbor_sq))
 
     # Handle RGB
-
     if is_rgb(img):
         channels = split_channels(img)
         channels = [median_filter(ch, neighbor_sq, padding_val) for ch in channels]
