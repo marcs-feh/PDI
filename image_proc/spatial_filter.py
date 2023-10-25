@@ -73,6 +73,10 @@ def sobel_edge_detect(img: np.ndarray) -> np.ndarray:
     a, b = apply_filters(img, [kn.sobel_edge_x, kn.sobel_edge_y])
     return (a + b).clip(0, 1.0)
 
+def roberts_edge_detect(img: np.ndarray) -> np.ndarray:
+    a, b = apply_filters(img, [kn.roberts_edge_x, kn.roberts_edge_y])
+    return (a + b).clip(0, 1.0)
+
 def apply_filter(img: np.ndarray, kernel: np.ndarray, mode: int = CONVOLVE, padding: float = 0) -> np.ndarray:
     assert (mode == CONVOLVE) or (mode == CORRELATE)
     f = convolve2D if mode == CONVOLVE else correlate2D

@@ -11,7 +11,8 @@ def main():
     img = ip.img_read('in.png')
     print(f'loaded {np.prod(img.shape) * 4} bytes')
 
-    out = ip.brightness_and_contrast(img, -1, 2)
+    out = ip.grayscale_weighted(img)
+    out = ip.roberts_edge_detect(out)
 
     ip.img_write('out.png', out)
 

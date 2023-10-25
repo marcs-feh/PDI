@@ -17,6 +17,17 @@ sobel_edge_y = np.array([
     [-1, -2, -1],
 ], dtype=np.float32)
 
+roberts_edge_x = np.array([
+    [+1, 0, 0],
+    [0, -1, 0],
+    [0,  0, 0],
+], dtype=np.float32)
+
+roberts_edge_y = np.array([
+    [0, +1, 0],
+    [-1, 0, 0],
+    [0,  0, 0],
+], dtype=np.float32)
 
 laplacian_sharpening_mask = np.array([
     [+1, +1, +1],

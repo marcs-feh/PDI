@@ -12,7 +12,7 @@ def threshold_rgb(img: np.ndarray, d_min: float, d_max: float, k: float = 1.0) -
 
 def threshold_gs(img: np.ndarray, d_min: float, d_max: float, k: float = 1.0) -> np.ndarray:
     in_range = lambda x: (abs(x) > d_min) and (abs(x) < d_max)
-    f = np.vectorize(lambda x: 0.0 if not in_range(x) else k)
+    f = np.vectorize(lambda x: 0.0 if in_range(x) else k)
     return f(img)
 
 def threshold(img: np.ndarray, d_min: float, d_max: float, k: float = 1.0) -> np.ndarray:
