@@ -81,7 +81,7 @@ def apply_filter(img: np.ndarray, kernel: np.ndarray, mode: int = CONVOLVE, padd
     f = convolve2D if mode == CONVOLVE else correlate2D
     chans = []
     # RGB Mode
-    if len(img.shape) == 3:
+    if is_rgb(img):
         chans = split_channels(img)
         for i in range(0, len(chans)):
             chans[i] = f(chans[i], kernel, padding).clip(0, 1.0)
