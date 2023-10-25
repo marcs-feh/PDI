@@ -3,5 +3,6 @@ __pycache__
 out.png
 *.out.*
 out/
+data/
 mask-cache*
 .venv
