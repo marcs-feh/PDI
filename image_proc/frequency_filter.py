@@ -63,9 +63,11 @@ def high_pass_ideal_filter(img: np.ndarray, radius: int) -> np.ndarray:
     freq *= mask
     return ifft(freq)
 
-def band_pass_ideal_filter(img:np.ndarray, band: int, bandwidth: int):
+def band_pass_ideal_filter(img:np.ndarray, band: int, bandwidth: int, reject: bool = False):
     freq = fft(img)
     mask = circular_mask(img.shape, band + (bandwidth//2)) + negative(circular_mask(img.shape, band - (bandwidth//2)))
+    if reject:
+        mask = negative(mask)
     freq *= mask
     return ifft(freq)
 
@@ -81,10 +83,14 @@ def high_pass_butterworth_filter(img:np.ndarray, radius: int, order: int = 2) ->
     freq *= mask
     return ifft(freq)
 
-def band_pass_butterworth_filter(img:np.ndarray, band: int, bandwidth: int, order: int = 2):
+def band_pass_butterworth_filter(img:np.ndarray, band: int, bandwidth: int, order: int = 2, reject: bool = False):
     freq = fft(img)
     mask = (butterworth_mask(img.shape, band + (bandwidth//2), order)
          + negative(butterworth_mask(img.shape, band - (bandwidth//2), order)))
+
+    if reject:
+        mask = negative(mask)
+
     freq *= mask
     return ifft(freq)
 
@@ -101,10 +107,14 @@ def high_pass_gaussian_filter(img:np.ndarray, radius: int) -> np.ndarray:
     freq *= mask
     return ifft(freq)
 
-def band_pass_gaussian_filter(img:np.ndarray, band: int, bandwidth: int):
+def band_pass_gaussian_filter(img:np.ndarray, band: int, bandwidth: int, reject: bool = False):
     freq = fft(img)
     mask = (gaussian_mask(img.shape, band + (bandwidth//2))
          + negative(gaussian_mask(img.shape, band - (bandwidth//2))))
+
+    if reject:
+        mask = negative(mask)
+
     freq *= mask
     return ifft(freq)
 
