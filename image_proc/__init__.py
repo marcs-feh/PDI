@@ -1,4 +1,5 @@
 from .color import *
+from .morphological_filter import *
 from .frequency_filter import *
 from .img_file import *
 from .kernels import *
