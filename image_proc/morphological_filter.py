@@ -1,17 +1,24 @@
-# TODO: everything
-from functools import reduce
 import numpy as np
-
 from image_proc.spatial_filter import valid_kernel_shape
 
 MORPH_MODES = {
     'erode',
     'dilate',
+    'open',
+    'close',
 }
 
 def morph(mode:str, img: np.ndarray, kernel: np.ndarray, padding_val: float = 0):
     assert mode in MORPH_MODES
     assert valid_kernel_shape(kernel.shape)
+
+    if mode == 'open':
+        eroded = morph('erode', img, kernel, padding_val)
+        return morph('dilate', eroded, kernel, padding_val)
+    elif mode == 'close':
+        dilated = morph('dilate', img, kernel, padding_val)
+        return morph('erode', dilated, kernel, padding_val)
+
     off = kernel.shape[0] // 2
 
     mask = kernel.flatten()
