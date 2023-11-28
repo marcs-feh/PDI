@@ -2,6 +2,7 @@ __pycache__
 *.pyc
 out.png
 *.out.*
+out.*
 out/
 data/
 mask-cache*

@@ -6,24 +6,22 @@ from image_proc.pointwise_filter import threshold
 
 from image_proc.spatial_filter import gaussian_blur
 
-
 k = np.array(
-    [
+    [[1,1,1],
     [1,1,1],
-    [1,1,1],
-    [1,1,1],
-    ],
+    [1,1,1]],
     dtype=np.float32
 ); 
 
 def main():
     img = ip.img_read('in.png')
-    out = ip.grayscale_weighted(img)
-    out = threshold(out, 0.3, 1.1)
+    gs = ip.grayscale_weighted(img)
+    out = threshold(gs, 0.3, 1.1)
     print(f'loaded {np.prod(img.shape) * 4} bytes')
 
     out = morph('open', out, k)
     out = morph('close', out, k)
+    out *= gs
 
     ip.img_write('out.png', out)
 
